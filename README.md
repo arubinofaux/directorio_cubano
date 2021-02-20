@@ -1,24 +1,28 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Supporting api for a console based scraper.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+jQuery.ajax({
+  data: {
+    'action': 'get_direcotio_dcca',
+    'tipo': 1,
+    'provinvia': 1,
+    'criterio': 53328201
+  },
+  url: '/wp-admin/admin-ajax.php',
+  type: 'POST',
+  success: function(response) {
+    console.log(response);
+    jQuery.ajax({
+      data: response,
+      contentType: "text/html; charset=UTF-8",
+      url: 'http://localhost:3000/entry/read',
+      type: 'POST',
+      success: function(r) {
+        console.log(r);
+      }
+    })
+  }
+})
+```
