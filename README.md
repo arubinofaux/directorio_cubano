@@ -26,3 +26,19 @@ jQuery.ajax({
   }
 })
 ```
+
+```
+let baseNumber = 50000000
+const maxNumber = 50000009
+
+while (true) {
+  if (baseNumber == maxNumber) {
+    console.log("stopping");
+    break
+  }
+
+  console.log(baseNumber);
+
+  baseNumber = baseNumber + 1
+}
+```
