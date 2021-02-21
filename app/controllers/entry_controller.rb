@@ -15,57 +15,66 @@ class EntryController < ApplicationController
     # read body
     data = request.body
     # parse it
-    doc = Nokogiri::HTML(data)
+    doc = Nokogiri::HTML(data, nil, 'ISO-8859-1')
+    doc.encoding = 'UTF-8'
 
-    name = ""
-    phone = ""
-    address = ""
+    foundEntries = []
 
     # find data inside table
-    doc.css('td').each_with_index do |line, index|
-      case index
-      when 0
-        name = line.text.split.each { |name| name.capitalize! }.join(' ')
-      when 1
-        phone = line.text.strip
-    
-        if phone.length == 10
-          phone = phone[2..-1]
+    doc.css('tbody tr').each do |tr|
+      name = ""
+      phone = ""
+      address = ""
+
+      tr.css('td').each_with_index do |line, index|
+        case index
+        when 0
+          name = line.text.split.each { |name| name.capitalize! }.join(' ')
+        when 1
+          phone = line.text.strip
+      
+          if phone.length == 10
+            phone = phone[2..-1]
+          end
+        when 2
+          address = line.text.split.each { |name| name.capitalize! }.join(' ')
         end
-      when 2
-        address = line.text.split.each { |name| name.capitalize! }.join(' ')
       end
+
+      foundEntries << {
+        name: name, phone: phone, address: address
+      }
     end
 
-    logger.info("#{name}, #{phone}, #{address}")
+    foundEntries.each do |d|
+      if d[:phone].length == 8
+        entry =  Entry.find_by_phone(d[:phone])
+        comp = true
 
-    if phone.length == 8
-      entry =  Entry.find_by_phone(phone)
-      comp = true
+        comp = false if d[:name].length == 0
+        comp = false if d[:address].length == 0
 
-      comp = false if name.length == 0
-      comp = false if address.length == 0
-
-      if entry
-        # remove partial entry
-        if comp
-          entry.update(
-            name: name,
-            address: address,
-            completed: comp
-          )
+        if entry
+          # remove partial entry
+          if comp
+            entry.update(
+              name: d[:name],
+              address: d[:address],
+              completed: comp
+            )
+          else
+            entry.destroy
+          end
         else
-          entry.destroy
-        end
-      else
-        # create the entry
-        unless comp == false
-          Entry.create(
-            name: name,
-            phone: phone,
-            address: address,
-            completed: comp
-          )
+          # create the entry
+          unless comp == false
+            Entry.create(
+              name: d[:name],
+              phone: d[:phone],
+              address: d[:address],
+              completed: comp
+            )
+          end
         end
       end
     end

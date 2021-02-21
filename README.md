@@ -37,6 +37,8 @@ const interval = setInterval(function() {
     url: 'http://localhost:3000/entry/random',
     type: 'GET',
     success: function(random) {
+      console.log(entries)
+      console.log(random.phone);
       
       jQuery.ajax({
         data: {
@@ -65,7 +67,7 @@ const interval = setInterval(function() {
     }
   })
 
-  if (entries == 3) {
+  if (entries == max) {
     console.log("stopping");
     clearInterval(interval);
   }
