@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   get 'entry/tracking'
+  get 'entry/random'
   post 'entry/read'
 
   root to: 'page#index'

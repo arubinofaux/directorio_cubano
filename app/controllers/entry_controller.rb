@@ -72,4 +72,10 @@ class EntryController < ApplicationController
 
     render json: {}
   end
+
+  def random
+    entry = Entry.where(completed: false).order("RANDOM()").first
+
+    render json: entry
+  end
 end
