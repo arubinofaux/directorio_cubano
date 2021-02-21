@@ -10,7 +10,7 @@ baseNumber = 50000000
 maxNumber = 59999999
 
 while TRUE
-  puts("creating: #{baseNumber}")
+  puts("Cubacel: #{baseNumber}")
   
   Entry.create(phone: baseNumber)
 
