@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-baseNumber = 50000000
-maxNumber = 59999999
+baseNumber = 53520000
+maxNumber = 53539999
 
 while TRUE
   puts("Cubacel: #{baseNumber}")
