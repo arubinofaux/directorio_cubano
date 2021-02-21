@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+baseNumber = 50000000
+maxNumber = 59999999
+
+while TRUE
+  puts("creating: #{baseNumber}")
+  
+  Entry.create(phone: baseNumber)
+
+  break if baseNumber == maxNumber
+  baseNumber += 1
+end
