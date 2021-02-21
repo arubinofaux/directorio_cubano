@@ -41,16 +41,32 @@ class EntryController < ApplicationController
 
     if phone.length == 8
       entry =  Entry.find_by_phone(phone)
+      comp = true
+
+      comp = false if name.length == 0
+      comp = false if address.length == 0
 
       if entry
-        # maybe update?
+        # remove partial entry
+        if comp
+          entry.update(
+            name: name,
+            address: address,
+            completed: comp
+          )
+        else
+          entry.destroy
+        end
       else
         # create the entry
-        Entry.create(
-          name: name,
-          phone: phone,
-          address: address
-        )
+        unless comp == false
+          Entry.create(
+            name: name,
+            phone: phone,
+            address: address,
+            completed: comp
+          )
+        end
       end
     end
 
