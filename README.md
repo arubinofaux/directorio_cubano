@@ -28,40 +28,49 @@ jQuery.ajax({
 ```
 
 ```
-let baseNumber = 50000000
-let maxNumber = 50000009
+let entries = 0
+let max = 5
+let wait = 4000
 
-while (true) {
-  console.log(baseNumber);
-
+const interval = setInterval(function() {
   jQuery.ajax({
-    data: {
-      'action': 'get_direcotio_dcca',
-      'tipo': 1,
-      'provinvia': 1,
-      'criterio': baseNumber
-    },
-    url: '/wp-admin/admin-ajax.php',
-    type: 'POST',
-    success: function(response) {
-      console.log(response);
+    url: 'http://localhost:3000/entry/random',
+    type: 'GET',
+    success: function(random) {
+      
       jQuery.ajax({
-        data: response,
-        contentType: "text/html; charset=UTF-8",
-        url: 'http://localhost:3000/entry/read',
+        data: {
+          'action': 'get_direcotio_dcca',
+          'tipo': 1,
+          'provinvia': 1,
+          'criterio': random.phone
+        },
+        url: '/wp-admin/admin-ajax.php',
         type: 'POST',
-        success: function(r) {
-          console.log(r);
+        success: function(response) {
+
+          jQuery.ajax({
+            data: response,
+            contentType: "text/html; charset=UTF-8",
+            url: 'http://localhost:3000/entry/read',
+            type: 'POST',
+            success: function(r) {
+              console.log(r);
+            }
+          })
+
         }
       })
+
     }
   })
 
-  if (baseNumber == maxNumber) {
+  if (entries == 3) {
     console.log("stopping");
-    break
+    clearInterval(interval);
   }
-  
-  baseNumber = baseNumber + 1
-}
+
+  entries = entries + 1
+
+}, wait);
 ```
